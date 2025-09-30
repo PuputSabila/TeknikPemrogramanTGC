@@ -1,0 +1,85 @@
+Challenges 1
+
+# Membuat class Sensor
+class Sensor:
+    def __init__(self, id_sensor, lokasi, jenis):
+        self.id_sensor = id_sensor
+        self.lokasi = lokasi
+        self.jenis = jenis
+
+    def info(self):
+        return f"Sensor ID: {self.id_sensor}, Lokasi: {self.lokasi}, Jenis: {self.jenis}"
+
+
+# Membuat turunan SensorSeismik dari Sensor
+class SensorSeismik(Sensor):
+    def __init__(self, id_sensor, lokasi, jenis, frekuensi_sampling):
+        super().__init__(id_sensor, lokasi, jenis)
+        self.frekuensi_sampling = frekuensi_sampling
+
+    def jumlah_sampel(self, durasi_detik):
+        """
+        Menghitung jumlah data amplitudo yang direkam dalam durasi tertentu.
+        :param durasi_detik: lamanya waktu perekaman (detik)
+        :return: jumlah sampel
+        """
+        return self.frekuensi_sampling * durasi_detik
+
+    def info(self):
+        return (super().info() +
+                f", Frekuensi Sampling: {self.frekuensi_sampling} Hz")
+
+
+# Contoh penggunaan
+sensor1 = Sensor("S001", "Sumatera", "Seismik")
+print(sensor1.info())
+
+sensor_seismik = SensorSeismik("S002", "Jawa", "Seismik", 100)
+print(sensor_seismik.info())
+print("Jumlah sampel dalam 10 detik:", sensor_seismik.jumlah_sampel(10))
+
+
+Challenges 2
+
+from abc import ABC, abstractmethod
+
+# Membuat class abstrak
+class Survey(ABC):
+    def __init__(self, lokasi):
+        self.lokasi = lokasi
+
+    @abstractmethod
+    def processing(self):
+        pass
+
+
+# Turunan untuk SeismicSurvey
+class SeismicSurvey(Survey):
+    def processing(self):
+        return f"Seismic processing di {self.lokasi}: Melakukan filtering data seismik."
+
+
+# Turunan untuk GravitySurvey
+class GravitySurvey(Survey):
+    def processing(self):
+        return f"Gravity processing di {self.lokasi}: Melakukan upward continuation."
+
+
+# Turunan untuk MagnetikSurvey
+class MagnetikSurvey(Survey):
+    def processing(self):
+        return f"Magnetik processing di {self.lokasi}: Melakukan anomaly mapping."
+
+
+# Contoh penggunaan
+if __name__ == "__main__":
+    # Membuat objek-objek survey
+    survei_list = [
+        SeismicSurvey("Sumatera"),
+        GravitySurvey("Kalimantan"),
+        MagnetikSurvey("Papua")
+    ]
+
+    # Iterasi dan panggil processing()
+    for survei in survei_list:
+        print(survei.processing())
